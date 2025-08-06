@@ -13,25 +13,25 @@ namespace spellbook
     {
         // Uguiのprefab - パレット
         public GameObject paretPrefab;
-        private EventSystem eventSystem;
+        private EventSystem _eventSystem;
         private Canvas canvas;
-        private RectTransform canvasRect;
-        private GameObject clickedItem;
-        private bool nowInvParet;
+        private RectTransform _canvasRect;
+        private GameObject _clickedItem;
+        private bool _nowInvParet;
 
 
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
 
-            nowInvParet = false;
+            _nowInvParet = false;
 
             canvas = this.GetComponent<Canvas>();
-            canvasRect = canvas.GetComponent<RectTransform>();
+            _canvasRect = canvas.GetComponent<RectTransform>();
 
 
-            //eventSystem = FindObjectsByType(EventSystem, FindObjectsSortMode.None);
-            eventSystem = GameObject.FindAnyObjectByType<EventSystem>();
+            //_eventSystem = FindObjectsByType(_eventSystem, FindObjectsSortMode.None);
+            _eventSystem = GameObject.FindAnyObjectByType<EventSystem>();
 
         }
 
@@ -40,22 +40,14 @@ namespace spellbook
         {
             if (Input.GetMouseButtonDown(0))
             {
-                clickedItem = null;
+                _clickedItem = null;
 
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit2D hit2D = Physics2D.Raycast((Vector2)ray.origin, (Vector2)ray.direction);
-
-                // nullじゃない場合
-                if (hit2D)
-                {
-                    clickedItem = hit2D.transform.gameObject;
-                }
 
                 // 条件分岐 - もしパレットにクリックしたら削除、パレット以外にクリックしたら再生成
                 // パレット以外をクリック、さらにパレット未生成
-                if (clickedItem.name != "Paret" && !nowInvParet)
+                if (!_nowInvParet)
                 {
-                    nowInvParet = true;
+                    _nowInvParet = true;
                     ShowParet();
                 }
             }
@@ -64,17 +56,17 @@ namespace spellbook
         void ShowParet()
         {
             Vector2 localPoint;
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, Input.mousePosition, canvas.worldCamera, out localPoint);
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(_canvasRect, Input.mousePosition, canvas.worldCamera, out localPoint);
             var item = Instantiate(paretPrefab);
             item.transform.SetParent(this.transform);
             item.GetComponent<RectTransform>().anchoredPosition = localPoint;
         }
 
         //外部からパレット削除時　フラグリセット
-        void ClearParetState()
+        public void ClearParetState()
         {
-            nowInvParet = false;
-            Debug.Log("nowInvParet is false by ClearParetState()");
+            _nowInvParet = false;
+            Debug.Log("_nowInvParet is false by ClearParetState()");
         }
 
         // How to using async and await!!
