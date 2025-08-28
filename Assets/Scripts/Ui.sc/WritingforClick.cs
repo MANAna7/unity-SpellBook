@@ -16,7 +16,6 @@ namespace spellbook
         private EventSystem _eventSystem;
         private Canvas canvas;
         private RectTransform _canvasRect;
-        private GameObject _clickedItem;
         private bool _nowInvParet;
 
 
@@ -38,10 +37,9 @@ namespace spellbook
         // Update is called once per frame
         void Update()
         {
-            if (Input.GetMouseButtonDown(0))
+            // 右クリックでパレット生成、ペンを持っているときのみ
+            if (Input.GetMouseButtonDown(1))
             {
-                _clickedItem = null;
-
 
                 // 条件分岐 - もしパレットにクリックしたら削除、パレット以外にクリックしたら再生成
                 // パレット以外をクリック、さらにパレット未生成
@@ -53,6 +51,7 @@ namespace spellbook
             }
         }
 
+        // パレット生成
         void ShowParet()
         {
             Vector2 localPoint;
@@ -71,24 +70,24 @@ namespace spellbook
 
         // How to using async and await!!
         // 呼ぶときは onDestroy().Forget(); 明示的に宣言
-        public async void OnDestroy()
-        {
-            Debug.Log("aaaaaaaa");
-            await UniTask.Delay(100);
-            // 押されるまで待機 - bool型のやつならいける
-            await UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.Escape));
-            Debug.Log("nuoooooooooooooo");
+        //public async void OnDestroy()
+        //{
+        //    Debug.Log("aaaaaaaa");
+        //    await UniTask.Delay(100);
+        //    // 押されるまで待機 - bool型のやつならいける
+        //    await UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.Escape));
+        //    Debug.Log("nuoooooooooooooo");
 
-            // 関数が終わるまで待機させる 下に行かない Updateとかを関数が終了するまで実行しないとかできる
-            await Stoper();
-        }
+        //    // 関数が終わるまで待機させる 下に行かない Updateとかを関数が終了するまで実行しないとかできる
+        //    await Stoper();
+        //}
 
 
-        public async UniTask Stoper()
-        {
-            Debug.Log("await");
-            await UniTask.Delay(100);
-        }
+        //public async UniTask Stoper()
+        //{
+        //    Debug.Log("await");
+        //    await UniTask.Delay(100);
+        //}
 
     }
 
