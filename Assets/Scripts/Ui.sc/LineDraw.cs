@@ -6,6 +6,7 @@ namespace spellbook
     public class LineDraw : MonoBehaviour
     {
         [SerializeField] private LineRenderer _lineRend;
+        [SerializeField] private PensStateSlider _pensStateSlider;
         [SerializeField] private Camera _camera;
 
         [SerializeField] private int _posCount = 0;
@@ -13,7 +14,7 @@ namespace spellbook
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
-
+            //_pensStateSlider = GetComponent<PensStateSlider>();
         }
 
         // Update is called once per frame
@@ -21,13 +22,15 @@ namespace spellbook
         {
             Vector2 mousePos = _camera.ScreenToWorldPoint(Input.mousePosition);
 
-            if (Input.GetMouseButton(0))
+            if (Input.GetMouseButton(0) && !_pensStateSlider.NoIncCheck())
             {
+
                 SetPosition(mousePos);
             }
             else if (Input.GetMouseButtonUp(0))
             {
                 _posCount = 0;
+                _pensStateSlider.ResetInc();
             }
 
 
@@ -39,6 +42,8 @@ namespace spellbook
             _posCount++;
             _lineRend.positionCount = _posCount;
             _lineRend.SetPosition(_posCount - 1, pos);
+
+            _pensStateSlider.DrawForInc();
         }
 
         private bool PosCheck(Vector2 pos)
